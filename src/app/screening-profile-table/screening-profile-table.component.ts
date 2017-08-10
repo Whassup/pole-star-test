@@ -1,4 +1,3 @@
-import { observable } from 'rxjs/symbol/observable';
 import { Observable } from 'rxjs/Rx';
 import { ScreeningProfilesService } from '../screening-profiles.service';
 import { Component, OnInit } from '@angular/core';
@@ -21,7 +20,7 @@ export class ScreeningProfileTableComponent implements OnInit {
   constructor(private screeningProfileService:ScreeningProfilesService) { }
 
   ngOnInit() {
-    this.getProfiles( (data:object[]) => this.sortProfilesAlpha( this.sort.activeAttribute, this.sort.reverse ) )
+    this.getProfiles( (data:object[]) => this.sortProfiles('alpha', this.sort.activeAttribute, this.sort.reverse ) )
   }
 
   //Get profiles from service
@@ -43,8 +42,8 @@ export class ScreeningProfileTableComponent implements OnInit {
     this.profiles = data.map( (profile:object) => {
       return { 
         'id': profile['id'],
-        'created': profile['created'],
-        'modified': profile['modified'],
+        'created': new Date(profile['created']),
+        'modified': new Date(profile['modified']),
         "name": profile['name'],
         "country_check_severity": this.convertCountryCheckSeverity( profile['country_check_severity'] )
       }
@@ -68,56 +67,55 @@ export class ScreeningProfileTableComponent implements OnInit {
   sortByHeader(type:string, name:string ){
     if( name === this.sort.activeAttribute) this.sort.reverse = !this.sort.reverse
     this.sort.activeAttribute = name
-    this.sortProfilesAlpha( name, this.sort.reverse )
+    this.sortProfiles(type, name, this.sort.reverse )
   }
 
+  generateSortFunction(type:string,reverse:boolean) {
+    let numericSort = function(reverse:boolean){
+      const sort = function (a:string|number,b:string|number){
+          if (a < b) return -1;
+          if (a > b) return 1;
+          return 0;
+      }
+      if(reverse) {
+        return function numericSortDescending(a:string|number,b:string|number){
+          return sort(b,a);
+        }
+      }
+      return function numericSortAscending(a:string|number,b:string|number){
+          return sort(a,b);
+      }
+    }(reverse)
+
+    if(type === "alpha") {
+      return function alphaSort(a:string,b:string){
+        return numericSort( a.toLowerCase(), b.toLowerCase() )
+      }
+    }
+
+    if(type === "alpha") {
+      return function alphaSort(a:string,b:string){
+        return numericSort( a.toLowerCase(), b.toLowerCase() )
+      }
+    }
+
+    if(type === "date") {
+      return function dateSort(a:any,b:any){
+        return numericSort( b.getTime(), a.getTime() )
+      }
+    }
+
+    return numericSort
+  }
+  
   
   //Sort the profiles by a specific property in aplha-numeric order
   //@param name - The name of the property value to sort by
   //@param boolean - flag for where sort order should be reversed.
-  sortProfilesAlpha(name:string,reverse:boolean=false ) {
+  sortProfiles(type:string,name:string,reverse:boolean=false ) {
     //create sort ascending or descending funciton as required
-    let alphaSort = function(){
-      const alphaSort = function alphaSort(a:string,b:string){
-          a = a.toLowerCase()
-          b = b.toLowerCase()
-          if (a < b) return -1;
-          if (a > b) return 1;
-          return 0;
-      }
-      if(reverse) {//sort Z-A
-        return function sortZA(a:string,b:string){
-          return alphaSort(b,a);
-        }
-      }
-      return function sortAZ(a:string,b:string){
-          return alphaSort(a,b);
-      }
-    }()
-    
-
-    this.profiles = this.profiles.sort( (profileA, profileB) =>  alphaSort( profileA[name], profileB[name]) )
+    let sort = this.generateSortFunction(type,reverse)
+    this.profiles = this.profiles.sort( (profileA, profileB) =>  sort( profileA[name], profileB[name] ) )
   }
 
-  sortProfilesNumeric(name:string,reverse:boolean=false ) {
-    //create sort ascending or descending funciton as required
-    let numericSort = function(){
-      const numericSort = function alphaSort(a:string,b:string){
-          if (a < b) return -1;
-          if (a > b) return 1;
-          return 0;
-      }
-      if(reverse) {//sort Z-A
-        return function numericSortDescending(a:string,b:string){
-          return numericSort(b,a);
-        }
-      }
-      return function numericSortAscending(a:string,b:string){
-          return numericSort(a,b);
-      }
-    }()
-    
-
-    this.profiles = this.profiles.sort( (profileA, profileB) =>  numericSort( profileA[name], profileB[name].toLowerCase()) )
-  }
 }

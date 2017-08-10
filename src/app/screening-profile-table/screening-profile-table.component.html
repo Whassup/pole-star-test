@@ -31,8 +31,8 @@
                   <span class="label label-success" *ngIf="profile.country_check_severity ==='Ok'">Ok</span>
                   <span class="label label-danger" *ngIf="profile.country_check_severity === 'Critical'">Critical</span>
                 </td>
-                <td>{{profile.created}}</td>
-                <td>{{profile.modified}}</td>
+                <td>{{profile.created | date:'medium'}}</td>
+                <td>{{profile.modified | date:'medium'}}</td>
             </tr>
         </tbody>
     </table>
