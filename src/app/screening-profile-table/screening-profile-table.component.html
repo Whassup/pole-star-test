@@ -1,3 +1,28 @@
+<h2><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filter</h2>
+<form class="form-inline">
+    <div class="form-group">
+        <label for="">Search</label>
+        <input type="search" name="name" id="name" class="form-control" (keyup)="search($event)">
+    </div>
+    <div class="form-group">
+        <strong>Country Check Severity</strong>
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-success">
+                <input type="checkbox" name="" id="" checked autocomplete="off"> Ok
+            </label>
+            <label class="btn btn-warning">
+                <input type="checkbox" name="" id="" autocomplete="off"> Warning
+            </label>
+            <label class="btn btn-danger">
+                <input type="checkbox" name="" id="" autocomplete="off"> Critical
+            </label>
+        </div>
+        
+    </div>
+</form>
+
+<hr>
+
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>

@@ -11,6 +11,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./screening-profile-table.component.css']
 })
 export class ScreeningProfileTableComponent implements OnInit {
+  private profilesUnfiltered:object[]
   private profiles:object[]
   private sort = {
     activeAttribute : "name",
@@ -48,6 +49,7 @@ export class ScreeningProfileTableComponent implements OnInit {
         "country_check_severity": this.convertCountryCheckSeverity( profile['country_check_severity'] )
       }
     })
+    this.profilesUnfiltered = this.profiles
   }
 
   //Convert country check severity to its' display format
@@ -116,6 +118,22 @@ export class ScreeningProfileTableComponent implements OnInit {
     //create sort ascending or descending funciton as required
     let sort = this.generateSortFunction(type,reverse)
     this.profiles = this.profiles.sort( (profileA, profileB) =>  sort( profileA[name], profileB[name] ) )
+    this.profilesUnfiltered = this.profilesUnfiltered.sort( (profileA, profileB) =>  sort( profileA[name], profileB[name] ) )
   }
 
+  //Filter 
+  search(event){
+    this.filterProfilesByName(event.srcElement.value)
+  }
+
+  filterProfilesByName(value){
+    console.log(value)
+    if(value === ''){
+       this.profiles = this.profilesUnfiltered
+    } else {
+      this.profiles = this.profilesUnfiltered.filter( profile => 
+        profile['name'].toLowerCase().startsWith( value.toLowerCase() )
+      )
+    }
+  }
 }
