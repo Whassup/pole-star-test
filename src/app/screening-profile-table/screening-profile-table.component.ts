@@ -43,9 +43,23 @@ export class ScreeningProfileTableComponent implements OnInit {
         'created': profile['created'],
         'modified': profile['modified'],
         "name": profile['name'],
-        "country_check_severity": profile['country_check_severity']
+        "country_check_severity": this.convertCountryCheckSeverity( profile['country_check_severity'] )
       }
     })
+  }
+
+  //Convert country check severity to its display format
+  convertCountryCheckSeverity(value:String){
+    switch(value){
+      case "90-CRITICAL":
+        return "Critical"
+      case "70-WARNING" :
+        return "Warning"
+      case "60-OK" :
+        return "Ok"
+    }
+
+    return ""
   }
 
 }

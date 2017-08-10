@@ -11,7 +11,11 @@
         <tbody>
             <tr *ngFor="let profile of profiles" class="{{profile.id}}">
                 <td scope="row">{{profile.name}}</td>
-                <td><span class="label label-warning">{{profile.country_check_severity}}</span></td>
+                <td>
+                  <span class="label label-warning" *ngIf="profile.country_check_severity === 'Warning'">Warning</span>
+                  <span class="label label-success" *ngIf="profile.country_check_severity ==='Ok'">Ok</span>
+                  <span class="label label-danger" *ngIf="profile.country_check_severity === 'Critical'">Critical</span>
+                </td>
                 <td>{{profile.created}}</td>
                 <td>{{profile.modified}}</td>
             </tr>
