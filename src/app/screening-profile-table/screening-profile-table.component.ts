@@ -9,35 +9,31 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./screening-profile-table.component.css']
 })
 export class ScreeningProfileTableComponent implements OnInit {
-  private profiles:Object[] = [{
-    "id": "eaad94d1-4e5c-496b-a565-50bf4a6d1262",
-    "created": "2016-03-07T08:01:46.013000Z",
-    "modified": "2016-03-07T08:01:46.014000Z",
-    "name": "Default Screening Profile",
-    "country_check_severity": "90-CRITICAL"
-  }]
-  private data
+  private profiles:object[]
 
   constructor(private screeningProfileService:ScreeningProfilesService) { }
 
   ngOnInit() {
-    this.getProfiles()
+    this.getProfiles( (data:object[]) => this.sortProfilesByAplha('name') )
   }
 
   //Get profiles from service
-  getProfiles(){
+  getProfiles( callback: (data:object[]) => void ){
     this.screeningProfileService.getScreeningProfiles().then( 
       (observer:Observable<any>) =>  {
         observer.subscribe( 
-          data  => this.mapProfiles(data)
+          (data:object[])  => {
+            this.mapProfiles(data)
+            callback(data)
+          }
         )
       }
     )
   }
 
   //Map the profiles from service into a standarised structure
-  mapProfiles(data:Object[]){
-    this.profiles = data.map( (profile:Object) => {
+  mapProfiles(data:object[]){
+    this.profiles = data.map( (profile:object) => {
       return { 
         'id': profile['id'],
         'created': profile['created'],
@@ -48,8 +44,8 @@ export class ScreeningProfileTableComponent implements OnInit {
     })
   }
 
-  //Convert country check severity to its display format
-  convertCountryCheckSeverity(value:String){
+  //Convert country check severity to its' display format
+  convertCountryCheckSeverity(value:string){
     switch(value){
       case "90-CRITICAL":
         return "Critical"
@@ -60,6 +56,30 @@ export class ScreeningProfileTableComponent implements OnInit {
     }
 
     return ""
+  }
+
+  sortProfilesByAplha(name:string,reverse:boolean=false ) {
+    //create sort ascending or descending funciton as required
+    let alphaSort = function(){
+      const alphaSort = function alphaSort(a:string,b:string){
+          a = a.toLowerCase()
+          b = b.toLowerCase()
+          if (a < b) return -1;
+          if (a > b) return 1;
+          return 0;
+      }
+      if(reverse) {//sort Z-A
+        return function sortZA(a:string,b:string){
+          return alphaSort (b,a);
+        }
+      }
+      return function sortAZ(a:string,b:string){
+          return alphaSort (a,b);
+      }
+    }()
+    
+
+    this.profiles = this.profiles.sort( (profileA, profileB) =>  alphaSort( profileA[name], profileB[name].toLowerCase()) )
   }
 
 }
