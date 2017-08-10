@@ -1,3 +1,5 @@
+import { HttpModule } from '@angular/http';
+import { ScreeningProfilesService } from './screening-profiles.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -10,9 +12,10 @@ import { ScreeningProfileTableComponent } from './screening-profile-table/screen
     ScreeningProfileTableComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpModule
   ],
-  providers: [],
+  providers: [ScreeningProfilesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
