@@ -1,3 +1,20 @@
-<p>
-  screening-profile-table works!
-</p>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="bg-primary"><u>Name <span class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by ascending</span></span></u></th>
+                <th>Country Check Severity <span class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by descending</span></span></th>
+                <th>Created Date <span class="glyphicon glyphicon-sort" aria-hidden="true"></span></th>
+                <th>Modified Date <span class="glyphicon glyphicon-sort" aria-hidden="true"></span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let profile of profiles" class="{{profile.id}}">
+                <td scope="row">{{profile.name}}</td>
+                <td><span class="label label-warning">{{profile.country_check_severity}}</span></td>
+                <td>{{profile.created}}</td>
+                <td>{{profile.modified}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
