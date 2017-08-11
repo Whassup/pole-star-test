@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ScreeningProfilesService } from './screening-profiles.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -13,7 +14,8 @@ import { ScreeningProfileTableComponent } from './screening-profile-table/screen
   ],
   imports: [
     BrowserModule,
-    HttpModule
+    HttpModule,
+    FormsModule
   ],
   providers: [ScreeningProfilesService],
   bootstrap: [AppComponent]

@@ -11,11 +11,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./screening-profile-table.component.css']
 })
 export class ScreeningProfileTableComponent implements OnInit {
-  private profilesUnfiltered:object[]
+  private profilesUnfiltered:object[]//This is a cache view of the profiles to required to run filters on
   private profiles:object[]
   private sort = {
     activeAttribute : "name",
     reverse: false
+  }
+
+  private filterProps = {
+    name: "",
+    ok : false,
+    warning : false,
+    critical : false
   }
 
   constructor(private screeningProfileService:ScreeningProfilesService) { }
@@ -121,19 +128,34 @@ export class ScreeningProfileTableComponent implements OnInit {
     this.profilesUnfiltered = this.profilesUnfiltered.sort( (profileA, profileB) =>  sort( profileA[name], profileB[name] ) )
   }
 
-  //Filter 
-  search(event){
-    this.filterProfilesByName(event.srcElement.value)
+  //Run filtering on profiles table
+  filter(){
+    console.log( this.filterProps )
+    this.profiles = this.filterProfilesByName(this.profilesUnfiltered)
+    this.profiles = this.filterProfilesByCountryCheckSeverity(this.profiles)
   }
 
-  filterProfilesByName(value){
-    console.log(value)
-    if(value === ''){
-       this.profiles = this.profilesUnfiltered
+  //Filter profiles by name
+  filterProfilesByName(profilesUnfiltered:object[]):object[]{
+    return profilesUnfiltered.filter( profile => 
+      profile['name'].toLowerCase().startsWith( this.filterProps.name.toLowerCase() )
+    )
+  }
+
+  //Filter profiles by severity type
+  filterProfilesByCountryCheckSeverity(profilesUnfiltered:object[]):object[]{
+    //Only filter if one is set
+    if( this.filterProps.critical || this.filterProps.warning || this.filterProps.ok ) {
+      return profilesUnfiltered.filter( profile => {
+        let test = false
+        if(this.filterProps.critical) test = (profile['country_check_severity'] == "Critical")
+        if(!test && this.filterProps.warning) test = (profile['country_check_severity'] == "Warning")
+        if(!test && this.filterProps.ok) test = (profile['country_check_severity'] == "Ok")
+        return test
+      })
     } else {
-      this.profiles = this.profilesUnfiltered.filter( profile => 
-        profile['name'].toLowerCase().startsWith( value.toLowerCase() )
-      )
+      return profilesUnfiltered
     }
+     
   }
 }

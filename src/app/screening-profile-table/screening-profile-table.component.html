@@ -2,19 +2,19 @@
 <form class="form-inline">
     <div class="form-group">
         <label for="">Search</label>
-        <input type="search" name="name" id="name" class="form-control" (keyup)="search($event)">
+        <input type="search" name="name" id="name" class="form-control" (keyup)="filter()" [(ngModel)]="filterProps.name">
     </div>
-    <div class="form-group">
+    <div class="form-group country-severity-filter">
         <strong>Country Check Severity</strong>
         <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-success">
-                <input type="checkbox" name="" id="" checked autocomplete="off"> Ok
+            <label class="btn btn-success" [ngClass]="{'active': filterProps.ok}">
+                <input type="checkbox" name="country-check-severity" id="country-check-severity-ok" checked autocomplete="off" (change)="filter()" [(ngModel)]="filterProps.ok"> Ok
             </label>
-            <label class="btn btn-warning">
-                <input type="checkbox" name="" id="" autocomplete="off"> Warning
+            <label class="btn btn-warning" [ngClass]="{'active': filterProps.warning}">
+                <input type="checkbox" name="country-check-severity" id="country-check-severity-warning" autocomplete="off" (change)="filter()" [(ngModel)]="filterProps.warning" value="Warning"> Warning
             </label>
-            <label class="btn btn-danger">
-                <input type="checkbox" name="" id="" autocomplete="off"> Critical
+            <label class="btn btn-danger" [ngClass]="{'active': filterProps.critical}">
+                <input type="checkbox" name="country-check-severity" id="country-check-severity-critical" autocomplete="off" (change)="filter()" [(ngModel)]="filterProps.critical" value="Critical"> Critical
             </label>
         </div>
         
@@ -27,24 +27,24 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th (click)="sortByHeader('alpha','name')" [ngClass]="{'bg-primary': this.sort.activeAttribute === 'name'}">
+                <th (click)="sortByHeader('alpha','name')" [ngClass]="{'bg-primary': sort.activeAttribute === 'name'}">
                   Name 
-                  <span *ngIf="this.sort.activeAttribute === 'name' && this.sort.reverse === false" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by A-Z</span></span>
-                  <span *ngIf="this.sort.activeAttribute === 'name' && this.sort.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by Z-A</span></span>
-                  <span *ngIf="this.sort.activeAttribute !== 'name'" class="glyphicon glyphicon-sort" aria-hidden="true"></span>
+                  <span *ngIf="sort.activeAttribute === 'name' && sort.reverse === false" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by A-Z</span></span>
+                  <span *ngIf="sort.activeAttribute === 'name' && sort.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by Z-A</span></span>
+                  <span *ngIf="sort.activeAttribute !== 'name'" class="glyphicon glyphicon-sort" aria-hidden="true"></span>
                 </th>
                 <th>Country Check Severity</th>
-                <th (click)="sortByHeader('date','created')" [ngClass]="{'bg-primary': this.sort.activeAttribute === 'created'}">
+                <th (click)="sortByHeader('date','created')" [ngClass]="{'bg-primary': sort.activeAttribute === 'created'}">
                   Created Date
-                  <span *ngIf="this.sort.activeAttribute === 'created' && this.sort.reverse === false" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by recent.</span></span>
-                  <span *ngIf="this.sort.activeAttribute === 'created' && this.sort.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by oldest.</span></span>
-                  <span *ngIf="this.sort.activeAttribute !== 'created'" class="glyphicon glyphicon-sort" aria-hidden="true"></span>
+                  <span *ngIf="sort.activeAttribute === 'created' && sort.reverse === false" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by recent.</span></span>
+                  <span *ngIf="sort.activeAttribute === 'created' && sort.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by oldest.</span></span>
+                  <span *ngIf="sort.activeAttribute !== 'created'" class="glyphicon glyphicon-sort" aria-hidden="true"></span>
                 </th>
-                <th (click)="sortByHeader('date','modified')" [ngClass]="{'bg-primary': this.sort.activeAttribute === 'modified'}">
+                <th (click)="sortByHeader('date','modified')" [ngClass]="{'bg-primary': sort.activeAttribute === 'modified'}">
                   Modified Date
-                  <span *ngIf="this.sort.activeAttribute === 'modified' && this.sort.reverse === false" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by recent.</span></span>
-                  <span *ngIf="this.sort.activeAttribute === 'modified' && this.sort.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by oldest.</span></span>
-                  <span *ngIf="this.sort.activeAttribute !== 'modified'" class="glyphicon glyphicon-sort" aria-hidden="true"></span>
+                  <span *ngIf="sort.activeAttribute === 'modified' && sort.reverse === false" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by recent.</span></span>
+                  <span *ngIf="sort.activeAttribute === 'modified' && sort.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by oldest.</span></span>
+                  <span *ngIf="sort.activeAttribute !== 'modified'" class="glyphicon glyphicon-sort" aria-hidden="true"></span>
                 </th>
             </tr>
         </thead>
