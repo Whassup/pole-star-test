@@ -8,7 +8,7 @@ enum SortType {
     Date = 3
 }
 
-const CountryCheckSeverityMap:Map<String,String>= new Map([
+const CountryCheckSeverityMap:Map<string,string>= new Map([
   ["90-CRITICAL" , 'Critical'],
   ["70-WARNING" , 'Warning'],
   ["60-OK" , 'Ok']
@@ -43,7 +43,8 @@ export class ScreeningProfileTableComponent implements OnInit {
   }
 
   //Get profiles from service
-  getProfiles( callback: (data:object[]) => void ){
+  //@param callback - Callback function to be run after data has been recieved
+  getProfiles( callback: (data:object[]) => void ):void{
     this.screeningProfileService.getScreeningProfiles().then( 
       (observer:Observable<any>) =>  {
         observer.subscribe( 
@@ -57,7 +58,8 @@ export class ScreeningProfileTableComponent implements OnInit {
   }
 
   //Map the profiles from service into a standarised structure
-  mapProfiles(data:object[]){
+  //@param data - Set of results data to convert into profile records
+  mapProfiles(data:object[]):void{
     this.profiles = data.map( (profile:object) => {
       return { 
         'id': profile['id'],
@@ -72,7 +74,7 @@ export class ScreeningProfileTableComponent implements OnInit {
 
   //Convert country check severity to its' display format
   //@param value - The value to convert to display format
-  convertCountryCheckSeverity(value:string){
+  convertCountryCheckSeverity(value:string):string{
     return CountryCheckSeverityMap.get(value)
   }
 
@@ -80,7 +82,7 @@ export class ScreeningProfileTableComponent implements OnInit {
   //@param type - Type of sort to performa
   //@param name - The name of the property value to sort by
   //@param boolean - flag for where sort order should be reversed.
-  sort(type:SortType=this.sortProps.type,name:string=this.sortProps.active,reverse?:boolean ) {
+  sort(type:SortType=this.sortProps.type,name:string=this.sortProps.active,reverse?:boolean ):void {
     //toggle sort direction if active selection is the same and no specific direction has been provided
     if( name === this.sortProps.active && reverse === undefined) reverse = !this.sortProps.reverse
     
@@ -133,7 +135,7 @@ export class ScreeningProfileTableComponent implements OnInit {
   }
 
   //Run filtering on profiles table
-  filter(){
+  filter():void{
     this.profiles = this.filterProfilesByName(this.profilesUnfiltered)
     this.profiles = this.filterProfilesByCountryCheckSeverity(this.profiles)
     //Re-sorting is required after filtering as the profilesUnfiltered is never sorted
@@ -141,17 +143,21 @@ export class ScreeningProfileTableComponent implements OnInit {
   }
 
   //Filter profiles by name
-  filterProfilesByName(profilesUnfiltered:object[]):object[]{
-    return profilesUnfiltered.filter( profile => 
+  //@param profiles - Set of profiles to filter
+  //@return - Returns a filtered set of profiles
+  filterProfilesByName(profiles:object[]):object[]{
+    return profiles.filter( profile => 
       profile['name'].toLowerCase().startsWith( this.filterProps.name.toLowerCase() )
     )
   }
 
   //Filter profiles by severity type
-  filterProfilesByCountryCheckSeverity(profilesUnfiltered:object[]):object[]{
+  //@param profiles - Set of profiles to filter
+  //@return - Returns a filtered set of profiles
+  filterProfilesByCountryCheckSeverity(profiles:object[]):object[]{
     //Only filter if one is set
     if( this.filterProps.critical || this.filterProps.warning || this.filterProps.ok ) {
-      return profilesUnfiltered.filter( profile => {
+      return profiles.filter( profile => {
         let test = false
         if(this.filterProps.critical) test = (profile['country_check_severity'] == "Critical")
         if(!test && this.filterProps.warning) test = (profile['country_check_severity'] == "Warning")
@@ -159,7 +165,7 @@ export class ScreeningProfileTableComponent implements OnInit {
         return test
       })
     } else {
-      return profilesUnfiltered
+      return profiles
     }
      
   }
