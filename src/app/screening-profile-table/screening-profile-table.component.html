@@ -22,30 +22,30 @@
 </form>
 
 <hr>
-<p>Displaying <strong>{{profiles.length}}</strong> of <strong>{{profilesUnfiltered.length}}</strong> results.</p>
+ <p>Displaying <strong>{{profiles.length}}</strong> of <strong>{{profilesUnfiltered.length}}</strong> results.</p> 
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
-                <th (click)="sortByHeader('alpha','name')" [ngClass]="{'bg-primary': sort.activeAttribute === 'name'}">
+                 <th (click)="sort(2,'name')" [ngClass]="{'bg-primary': sortProps.active === 'name'}">
                   Name 
-                  <span *ngIf="sort.activeAttribute === 'name' && sort.reverse === false" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by A-Z</span></span>
-                  <span *ngIf="sort.activeAttribute === 'name' && sort.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by Z-A</span></span>
-                  <span *ngIf="sort.activeAttribute !== 'name'" class="glyphicon glyphicon-sort" aria-hidden="true"></span>
+                  <span *ngIf="sortProps.active === 'name' && sortProps.reverse === false" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by A-Z</span></span>
+                  <span *ngIf="sortProps.active === 'name' && sortProps.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by Z-A</span></span>
+                  <span *ngIf="sortProps.active !== 'name'" class="glyphicon glyphicon-sort" aria-hidden="true"></span>
                 </th>
                 <th>Country Check Severity</th>
-                <th (click)="sortByHeader('date','created')" [ngClass]="{'bg-primary': sort.activeAttribute === 'created'}">
+                <th (click)="sort(3,'created')" [ngClass]="{'bg-primary': sortProps.active === 'created'}">
                   Created Date
-                  <span *ngIf="sort.activeAttribute === 'created' && sort.reverse === false" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by recent.</span></span>
-                  <span *ngIf="sort.activeAttribute === 'created' && sort.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by oldest.</span></span>
-                  <span *ngIf="sort.activeAttribute !== 'created'" class="glyphicon glyphicon-sort" aria-hidden="true"></span>
+                  <span *ngIf="sortProps.active === 'created' && sortProps.reverse === false" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by recent.</span></span>
+                  <span *ngIf="sortProps.active === 'created' && sortProps.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by oldest.</span></span>
+                  <span *ngIf="sortProps.active !== 'created'" class="glyphicon glyphicon-sort" aria-hidden="true"></span>
                 </th>
-                <th (click)="sortByHeader('date','modified')" [ngClass]="{'bg-primary': sort.activeAttribute === 'modified'}">
+                <th (click)="sort(3,'modified')" [ngClass]="{'bg-primary': sort.active === 'modified'}">
                   Modified Date
-                  <span *ngIf="sort.activeAttribute === 'modified' && sort.reverse === false" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by recent.</span></span>
-                  <span *ngIf="sort.activeAttribute === 'modified' && sort.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by oldest.</span></span>
-                  <span *ngIf="sort.activeAttribute !== 'modified'" class="glyphicon glyphicon-sort" aria-hidden="true"></span>
-                </th>
+                  <span *ngIf="sortProps.active === 'modified' && sortProps.reverse === false" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by recent.</span></span>
+                  <span *ngIf="sortProps.active === 'modified' && sortProps.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by oldest.</span></span>
+                  <span *ngIf="sortProps.active !== 'modified'" class="glyphicon glyphicon-sort" aria-hidden="true"></span>
+                </th> 
             </tr>
         </thead>
         <tbody>

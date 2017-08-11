@@ -2,8 +2,11 @@ import { Observable } from 'rxjs/Rx';
 import { ScreeningProfilesService } from '../screening-profiles.service';
 import { Component, OnInit } from '@angular/core';
 
-
-
+enum SortType {
+    Numeric = 1,
+    Alpha = 2,
+    Date = 3
+}
 
 @Component({
   selector: 'app-screening-profile-table',
@@ -11,13 +14,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./screening-profile-table.component.css']
 })
 export class ScreeningProfileTableComponent implements OnInit {
-  private profilesUnfiltered:object[]//This is a cache view of the profiles to required to run filters on
-  private profiles:object[]
-  private sort = {
-    activeAttribute : "name",
-    reverse: false
+  private profilesUnfiltered:object[]=[]//This is a cache view of the profiles to be utilised for filtering
+  private profiles:object[]=[]//This is the display view of the profiles
+  private sortProps = {
+    active : "name",
+    reverse: false,
+    type: SortType.Alpha
   }
-
   private filterProps = {
     name: "",
     ok : false,
@@ -28,7 +31,8 @@ export class ScreeningProfileTableComponent implements OnInit {
   constructor(private screeningProfileService:ScreeningProfilesService) { }
 
   ngOnInit() {
-    this.getProfiles( (data:object[]) => this.sortProfiles('alpha', this.sort.activeAttribute, this.sort.reverse ) )
+    //Get profiles data from endpoint and sort by name attribute
+    this.getProfiles( (data:object[]) => this.sort(this.sortProps.type, this.sortProps.active, this.sortProps.reverse) )
   }
 
   //Get profiles from service
@@ -73,13 +77,31 @@ export class ScreeningProfileTableComponent implements OnInit {
     return ""
   }
 
-  sortByHeader(type:string, name:string ){
-    if( name === this.sort.activeAttribute) this.sort.reverse = !this.sort.reverse
-    this.sort.activeAttribute = name
-    this.sortProfiles(type, name, this.sort.reverse )
+  //Sort the profiles by a specific property in aplha-numeric order
+  //@param type - Type of sort to performa
+  //@param name - The name of the property value to sort by
+  //@param boolean - flag for where sort order should be reversed.
+  sort(type:SortType=this.sortProps.type,name:string=this.sortProps.active,reverse?:boolean ) {
+    //toggle sort direction if active selection is the same and no specific direction has been provided
+    if( name === this.sortProps.active && reverse === undefined) reverse = !this.sortProps.reverse
+    
+    //Set new sort properties
+    this.sortProps.type = type
+    this.sortProps.active = name
+    this.sortProps.reverse = reverse
+    
+    //create sort ascending or descending funciton as required
+    let sort = this.generateSortFunction(type, reverse)
+
+    //Sort profiles
+    this.profiles = this.profiles.sort( (profileA, profileB) =>  sort( profileA[name], profileB[name] ) )
   }
 
-  generateSortFunction(type:string,reverse:boolean) {
+  // Creates a sort function of a specific type and specific direction
+  // @param type - Define the type of sort function to be built
+  // @param reverse - Define the sort direction for the function
+  // @returns - Returns a sorting function
+  generateSortFunction(type:SortType=SortType.Numeric,reverse:boolean=false) :(a:any, b:any) => number {
     let numericSort = function(reverse:boolean){
       const sort = function (a:string|number,b:string|number){
           if (a < b) return -1;
@@ -96,19 +118,13 @@ export class ScreeningProfileTableComponent implements OnInit {
       }
     }(reverse)
 
-    if(type === "alpha") {
+    if(type === SortType.Alpha) {
       return function alphaSort(a:string,b:string){
         return numericSort( a.toLowerCase(), b.toLowerCase() )
       }
     }
 
-    if(type === "alpha") {
-      return function alphaSort(a:string,b:string){
-        return numericSort( a.toLowerCase(), b.toLowerCase() )
-      }
-    }
-
-    if(type === "date") {
+    if(type === SortType.Date) {
       return function dateSort(a:any,b:any){
         return numericSort( b.getTime(), a.getTime() )
       }
@@ -116,23 +132,14 @@ export class ScreeningProfileTableComponent implements OnInit {
 
     return numericSort
   }
-  
-  
-  //Sort the profiles by a specific property in aplha-numeric order
-  //@param name - The name of the property value to sort by
-  //@param boolean - flag for where sort order should be reversed.
-  sortProfiles(type:string,name:string,reverse:boolean=false ) {
-    //create sort ascending or descending funciton as required
-    let sort = this.generateSortFunction(type,reverse)
-    this.profiles = this.profiles.sort( (profileA, profileB) =>  sort( profileA[name], profileB[name] ) )
-    this.profilesUnfiltered = this.profilesUnfiltered.sort( (profileA, profileB) =>  sort( profileA[name], profileB[name] ) )
-  }
 
   //Run filtering on profiles table
   filter(){
     console.log( this.filterProps )
     this.profiles = this.filterProfilesByName(this.profilesUnfiltered)
     this.profiles = this.filterProfilesByCountryCheckSeverity(this.profiles)
+    //Re-sorting is required after filtering as the profilesUnfiltered is never sorted
+    this.sort(this.sortProps.type, this.sortProps.active, this.sortProps.reverse)
   }
 
   //Filter profiles by name
