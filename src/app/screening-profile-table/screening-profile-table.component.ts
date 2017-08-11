@@ -97,7 +97,7 @@ export class ScreeningProfileTableComponent implements OnInit {
     //Set new sort properties
     this.sortProps.type = type
     this.sortProps.active = name
-    this.sortProps.reverse = reverse
+    if(reverse != undefined) this.sortProps.reverse = reverse
     
     //create sort ascending or descending funciton as required
     let sort = this.generateSortFunction(type, reverse)
