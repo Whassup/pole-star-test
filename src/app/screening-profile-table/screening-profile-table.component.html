@@ -4,7 +4,7 @@
         <label for="">Search</label>
         <input type="search" name="name" id="name" class="form-control" (keyup)="filter()" [(ngModel)]="filterProps.name">
     </div>
-    <div class="form-group country-severity-filter">
+    <div class="form-group country-check-severity-filter">
         <strong>Country Check Severity</strong>
         <div class="btn-group" data-toggle="buttons">
             <label class="btn btn-success" [ngClass]="{'active': filterProps.ok}">

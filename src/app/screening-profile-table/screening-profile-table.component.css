@@ -1,8 +1,8 @@
 /* Added styling specifically for these buttons filters as Boostrap doesn't have a good enough active view */
-.country-severity-filter .btn {
+.country-check-severity-filter .btn {
     opacity: 0.7
 }
 
-.country-severity-filter .btn.active {
+.country-check-severity-filter .btn.active {
     opacity: 1
 }
