@@ -14,6 +14,14 @@ const CountryCheckSeverityMap:Map<string,string>= new Map([
   ["60-OK" , 'Ok']
 ])
 
+interface Profile {
+  'id':string
+  'created':Date
+  'modified': Date
+  "name":string
+  "country_check_severity"?:string
+}
+
 
 @Component({
   selector: 'app-screening-profile-table',
@@ -21,8 +29,8 @@ const CountryCheckSeverityMap:Map<string,string>= new Map([
   styleUrls: ['./screening-profile-table.component.css']
 })
 export class ScreeningProfileTableComponent implements OnInit {
-  private profilesUnfiltered:object[]=[]//This is a cache view of the profiles to be utilised for filtering
-  private profiles:object[]=[]//This is the display view of the profiles
+  private profilesUnfiltered:Profile[]=[]//This is a cache view of the profiles to be utilised for filtering
+  private profiles:Profile[]=[]//This is the display view of the profiles
   private sortProps = {
     active : "name",
     reverse: false,
@@ -145,7 +153,7 @@ export class ScreeningProfileTableComponent implements OnInit {
   //Filter profiles by name
   //@param profiles - Set of profiles to filter
   //@return - Returns a filtered set of profiles
-  filterProfilesByName(profiles:object[]):object[]{
+  filterProfilesByName(profiles:Profile[]):Profile[]{
     return profiles.filter( profile => 
       profile['name'].toLowerCase().startsWith( this.filterProps.name.toLowerCase() )
     )
@@ -154,7 +162,7 @@ export class ScreeningProfileTableComponent implements OnInit {
   //Filter profiles by severity type
   //@param profiles - Set of profiles to filter
   //@return - Returns a filtered set of profiles
-  filterProfilesByCountryCheckSeverity(profiles:object[]):object[]{
+  filterProfilesByCountryCheckSeverity(profiles:Profile[]):Profile[]{
     //Only filter if one is set
     if( this.filterProps.critical || this.filterProps.warning || this.filterProps.ok ) {
       return profiles.filter( profile => {
