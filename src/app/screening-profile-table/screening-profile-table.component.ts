@@ -8,6 +8,13 @@ enum SortType {
     Date = 3
 }
 
+const CountryCheckSeverityMap:Map<String,String>= new Map([
+  ["90-CRITICAL" , 'Critical'],
+  ["70-WARNING" , 'Warning'],
+  ["60-OK" , 'Ok']
+])
+
+
 @Component({
   selector: 'app-screening-profile-table',
   templateUrl: './screening-profile-table.component.html',
@@ -64,17 +71,9 @@ export class ScreeningProfileTableComponent implements OnInit {
   }
 
   //Convert country check severity to its' display format
+  //@param value - The value to convert to display format
   convertCountryCheckSeverity(value:string){
-    switch(value){
-      case "90-CRITICAL":
-        return "Critical"
-      case "70-WARNING" :
-        return "Warning"
-      case "60-OK" :
-        return "Ok"
-    }
-
-    return ""
+    return CountryCheckSeverityMap.get(value)
   }
 
   //Sort the profiles by a specific property in aplha-numeric order
@@ -135,7 +134,6 @@ export class ScreeningProfileTableComponent implements OnInit {
 
   //Run filtering on profiles table
   filter(){
-    console.log( this.filterProps )
     this.profiles = this.filterProfilesByName(this.profilesUnfiltered)
     this.profiles = this.filterProfilesByCountryCheckSeverity(this.profiles)
     //Re-sorting is required after filtering as the profilesUnfiltered is never sorted
