@@ -1,13 +1,24 @@
+import { ScreeningProfilesService } from './screening-profiles.service';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { BrowserModule } from '@angular/platform-browser';
+import { ScreeningProfileTableComponent } from './screening-profile-table/screening-profile-table.component';
 import { TestBed, async } from '@angular/core/testing';
-
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
+        AppComponent,
+        ScreeningProfileTableComponent
       ],
+      imports: [
+        BrowserModule,
+        HttpModule,
+        FormsModule
+      ],
+      providers: [ScreeningProfilesService]
     }).compileComponents();
   }));
 
