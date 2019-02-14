@@ -28,6 +28,29 @@ You should aim to get this test back to us within a day but there is no precise 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.6.
 
+## Planning
+
+### Minimum functionality required to meet requirements
+* Display list of of screening profiles sorted by latest date.
+* Display attributes in a table list with headers for; Name, Country Check Severity, Created Date, Modified Date
+* Allow each table header to be delectable for sorting by alphanumeric or date depending on the data type. (Should be able to reverse sort as well)
+* Allow user input for filtering by name or country check severity
+    * Name filter will do a string starts with match and sorting will not change.
+    * Country check severity will allow filtering by multiple country check severity.
+        * Filter options are; Critical, Warning, Ok.
+
+### Build Plan
+* Mockup a base layout using twitter bootstrap.
+* Create components for;
+    * screening-profile-table
+* Create a service for getting the screenings.json data.
+
+### Considerations
+* Did not add other country severity types as it was not included in the requirements. If it is not one of the 3 options no severity is displayed.
+
+
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
