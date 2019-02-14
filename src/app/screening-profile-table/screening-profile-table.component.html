@@ -40,7 +40,7 @@
                   <span *ngIf="sortProps.active === 'created' && sortProps.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by oldest.</span></span>
                   <span *ngIf="sortProps.active !== 'created'" class="glyphicon glyphicon-sort" aria-hidden="true"></span>
                 </th>
-                <th (click)="sort(3,'modified')" [ngClass]="{'bg-primary': sort.active === 'modified'}">
+                <th (click)="sort(3,'modified')" [ngClass]="{'bg-primary': sortProps.active === 'modified'}">
                   Modified Date
                   <span *ngIf="sortProps.active === 'modified' && sortProps.reverse === false" class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"><span class="sr-only">Sorted by recent.</span></span>
                   <span *ngIf="sortProps.active === 'modified' && sortProps.reverse === true" class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"><span class="sr-only">Sorted by oldest.</span></span>
