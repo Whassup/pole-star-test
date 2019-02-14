@@ -7,8 +7,8 @@ describe('pole-star-test App', () => {
     page = new PoleStarTestPage();
   });
 
-  it('should display welcome message', () => {
+  it('should display title \'Screening Profiles\'', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!');
+    expect(page.getTitle()).toEqual('Screening Profiles');
   });
 });
