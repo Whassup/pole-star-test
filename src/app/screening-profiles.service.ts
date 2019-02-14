@@ -5,15 +5,15 @@ import 'rxjs/Rx';
 @Injectable()
 export class ScreeningProfilesService {
 
-  constructor(public http:Http) {}
+  constructor(public http: Http) {}
 
-  getScreeningProfiles():Promise<Object>{
+  getScreeningProfiles(): Promise<Object> {
     return Promise.resolve( this.getData() );
   }
 
   getData() {
-    return this.http.get("/assets/screenings.json")
-        .map((res:Response) => res.json().results); 
+    return this.http.get('/assets/screenings.json')
+        .map((res: Response) => res.json().results);
   }
 
 }
